@@ -1,16 +1,40 @@
+#######
 import pickle
 import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-model_fraud = pickle.load(open('file_pickle/model_fraud_undersampling.sav','rb'))
-tfidf = TfidfVectorizer
-loaded_vec = TfidfVectorizer(decode_error="replace", vocabulary=set(pickle. load(open("./file_pickle/feature_tf-idf_undersampling.sav", "rb"))))
+# Load model dan TF-IDF vectorizer
+model_fraud = pickle.load(open('file_pickle/model_fraud_undersampling.sav', 'rb'))
+loaded_vec = TfidfVectorizer(
+    decode_error="replace",
+    vocabulary=set(pickle.load(open("file_pickle/feature_tf-idf_undersampling.sav", "rb")))
+)
 
-st.title ('Prediksi SMS Penipuan')
-clean_teks = st.text_input('Masukan Teks SMS')
+# Panduan penggunaan
+st.markdown("""
+### 📘 Panduan Penggunaan
+1. Masukkan teks SMS yang ingin diperiksa pada kolom input di bawah.
+2. Klik tombol *"Hasil Deteksi"*.
+3. Aplikasi akan menampilkan hasil prediksi apakah SMS tersebut *normal* atau *penipuan*.
+
+💡 Tips:
+- Gunakan teks SMS yang lengkap untuk hasil deteksi yang lebih akurat.
+""")
+
+# Judul aplikasi
+st.title('📱 Prediksi SMS Penipuan')
+
+# Input dari pengguna
+clean_teks = st.text_input('✉ Masukkan Teks SMS')
+
+# Inisialisasi hasil
 fraud_detection = ''
+
+# Tombol prediksi
 if st.button('Hasil Deteksi'):
     predict_fraud = model_fraud.predict(loaded_vec.fit_transform([clean_teks]).toarray())
-    fraud_detection = 'SMS Normal' if predict_fraud[0] == 0 else 'SMS Penipuan'
+    fraud_detection = '✅ SMS Normal' if predict_fraud[0] == 0 else '⚠ SMS Penipuan'
 
-st.success(fraud_detection)
+# Tampilkan hasil
+if fraud_detection:
+    st.success(fraud_detection)
