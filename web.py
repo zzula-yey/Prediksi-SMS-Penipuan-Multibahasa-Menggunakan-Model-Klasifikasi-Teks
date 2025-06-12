@@ -4,10 +4,10 @@ import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Load model dan TF-IDF vectorizer
-model_fraud = pickle.load(open('file_pickle/model_fraud_undersampling.sav', 'rb'))
+model_fraud = pickle.load(open('model_fraud_undersampling.sav', 'rb'))
 loaded_vec = TfidfVectorizer(
     decode_error="replace",
-    vocabulary=set(pickle.load(open("file_pickle/feature_tf-idf_undersampling.sav", "rb")))
+    vocabulary=set(pickle.load(open("feature_tf-idf_undersampling.sav", "rb")))
 )
 
 # Panduan penggunaan
